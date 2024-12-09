@@ -8,26 +8,21 @@
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/temaescuro.css">
-  <link rel="stylesheet" href="css/index.css">
-  
+
+
+    <?php if($paginaUrl === "principal"):?>
+      <link rel="stylesheet" href="css/index.css">
+    <?php endif; ?>
     <?php if($paginaUrl === "contato"):?>
         <link rel="stylesheet" href="css/contato.css">
         <link rel="stylesheet" href="css/validacao-contato.css">
     <?php endif; ?>
-    <?php if($paginaUrl === "cadastrar-noticia"):?>
+
+    <?php if($paginaUrl === "contato"):?>
         <link rel="stylesheet" href="css/contato.css">
         <link rel="stylesheet" href="css/validacao-contato.css">
     <?php endif; ?>
-    <?php if($paginaUrl === "registro"):?>
-        <link rel="stylesheet" href="css/registro.css">
+    <?php if($paginaUrl === "cadastrar-noticia" || $paginaUrl === "cadastrar-categoria" ):?>
+        <link rel="stylesheet" href="css/contato.css">
+        <link rel="stylesheet" href="css/validacao-contato.css">
     <?php endif; ?>
-    <?php if($paginaUrl === "login"):?>
-        <link rel="stylesheet" href="css/login.css">
-    <?php endif; ?>
-
-  <script src="scripts/header.js" defer></script>
-  <script src="scripts/validacao.js" defer></script>
-  <title>InfoSports</title>
-</head>
-
-<body>

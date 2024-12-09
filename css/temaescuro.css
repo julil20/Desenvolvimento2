@@ -9,7 +9,8 @@ body {
 }
 .escuro{
     background: #111 !important;
-    color:#fff !important;
+    color:#ffffff !important;
+    
 }
 .check {
     opacity: 0;

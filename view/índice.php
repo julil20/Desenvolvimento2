@@ -2,7 +2,6 @@
 include_once("configuracao.php");
 include_once("configuracao/conexao.php");
 include_once("funcoes.php");
-include_once("model/acesso_model.php");
 
 $nome = ($_SERVER["REQUEST_METHOD"] == "POST"
 && !empty($_POST['nome'])) ? $_POST['nome'] : null;
@@ -43,9 +42,6 @@ $imagem = ($_SERVER["REQUEST_METHOD"] == "POST"
 $nomeCategoria = ($_SERVER["REQUEST_METHOD"] == "POST"
 && !empty($_POST['nomeCategoria'])) ? $_POST['nomeCategoria'] : null;
 
-// $aceitacaoCookie = ($_SERVER["REQUEST_METHOD"] == "POST"
-// && !empty($_POST['$aceitacaoCookie'])) ? $_POST['$aceitacaoCookie'] : null;
-
  $resposta = 0;
  $resposta = calcularImc($peso, $altura);
  $classificacao = classificarImc($resposta);
@@ -71,42 +67,31 @@ if($paginaUrl === "principal"){
   cadastrarContato($nome,$sobrenome,$email,$telefone,$mensagem);
 }elseif($paginaUrl === "cadastrar-noticia"){
   $nomedaImagem = upload($imagem);
-
+  
   cadastrarNoticia($titulo,$nomedaImagem,$descricao);
 }elseif($paginaUrl === "cadastrar-categoria"){
   if(!verificarCategoriaDuplicada($nomeCategoria)){
     cadastrarCategoria($nomeCategoria);
   }
 }elseif($paginaUrl === "login"){
-  $usuarioCadastrado = acesso::verificarLogin($login);
+  $usuarioCadastrado = verificarLogin($login);
   if(
     $usuarioCadastrado &&
-    acesso::validaSenha($senha, $usuarioCadastrado['senha'])
+    validaSenha($senha, $usuarioCadastrado['senha'])
   ){
-      acesso::registrarAcessoValido($usuarioCadastrado);
-  }// Verificar se o cookie "cookies_aceitos" existe
-// if (!isset($_COOKIE["cookies_aceitos"])) {
-//   // Exibir o aviso de consentimento
-//   echo '<div class="aviso-cookies">
-//           <p>Este site usa cookies para melhorar a experiência do usuário. Ao continuar navegando, você concorda com o uso de cookies.</p>
-//           <button id="aceitar-cookies">Aceitar</button>
-//         </div>';
-// } else {
-//   // O usuário já aceitou os cookies, não exibir o aviso
-//   echo "<p>Cookies aceitos.</p>";
-// }
+      registrarAcessoValido($usuarioCadastrado);
+  }
 }elseif($paginaUrl === "sair"){
-  acesso::limparSessao();
-}elseif($paginaUrl === "detalhe")
+  limparSessao();
+}elseif($paginaUrl === "detalhe"){
   if($_GET && isset($_GET['id'])){
     $idNoticia = $_GET['id'];
   }else{
     $idNoticia = 0;
   }
-  @$noticia = buscarNoticiaPorId($idNoticia);{
-  }
-  @$noticiasPorCategoria = listarNoticiasPorCategoria($noticia['categoria_id']);{
-  }
+  $noticia = buscarNoticiaPorId($idNoticia);
+  $noticiasPorCategoria = listarNoticiasPorCategoria($noticia['categoria_id']);
+}
 
 include_once("view/header.php");
   if($paginaUrl === "principal"){
@@ -116,15 +101,13 @@ include_once("view/header.php");
   }elseif($paginaUrl === "login"){
     include_once("view/login.php");
   }elseif($paginaUrl === "registro"){
-    acesso::protegerTela();
-    include_once("model/registro_model.php");
     include_once("controller/registro_controller.php");
   }elseif($paginaUrl === "cadastrar-noticia"){
-    acesso::protegerTela();
+    protegerTela();
     $categorias = listarCategorias();
     include_once("view/noticia.php");
   }elseif($paginaUrl === "cadastrar-categoria"){
-    acesso::protegerTela();
+    protegerTela();
     include_once("view/categoria.php");
   }elseif($paginaUrl === "detalhe"){
     include_once("view/detalhe.php");
